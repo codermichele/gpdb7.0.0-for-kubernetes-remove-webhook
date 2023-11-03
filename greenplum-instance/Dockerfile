@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:experimental
 ARG TAG_PREFIX=""
-ARG GREENPLUM_VERSION=unknown
+ARG GREENPLUM_VERSION=7.0.0
 FROM golang:1.19 as build-in-docker
 
 COPY greenplum-instance/ /greenplum-for-kubernetes/greenplum-instance/
@@ -60,8 +60,8 @@ RUN \
     chmod 0755 /var/run/sshd && \
     echo "gpadmin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-ENV PXF_CONF=/etc/pxf
-RUN mkdir -p ${PXF_CONF} && chown -R gpadmin:gpadmin ${PXF_CONF}
+#ENV PXF_CONF=/etc/pxf
+#RUN mkdir -p ${PXF_CONF} && chown -R gpadmin:gpadmin ${PXF_CONF}
 
 # Install tini
 RUN wget https://github.com/krallin/tini/releases/download/v0.19.0/tini_0.19.0-amd64.deb && \
@@ -73,8 +73,7 @@ USER gpadmin
 
 # USER env is referenced by `gpconfig`, `gpcheckcat`, `gpssh`, `gpscp`, `gpinitsegment`,
 # and `gpload` utilities through `os.environ.get('USER')`
-ENV USER=gpadmin
-ENV PGPORT=5432
+ENV USER=gpadmin PGPORT=5432 TZ=Asia/Shanghai LANG=en_US.UTF-8
 WORKDIR /home/gpadmin
 
 # TODO update the deploy.sh etc. to only depends on /tools instead of /home/gpadmin/tools

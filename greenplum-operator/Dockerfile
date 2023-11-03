@@ -23,10 +23,10 @@ RUN set -x && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG VERSION=dev
-ARG DATE=unknown
-ARG LICENSE="https://network.pivotal.io/legal_documents/vmware_eula"
-ARG GREENPLUM_VERSION=unknown
+ARG VERSION=commit
+ARG DATE="3 Nov 2023"
+ARG LICENSE="https://www.apache.org/licenses/LICENSE-2.0"
+ARG GREENPLUM_VERSION=7.0.0
 
 ENV GREENPLUM_VERSION=${GREENPLUM_VERSION}
 
