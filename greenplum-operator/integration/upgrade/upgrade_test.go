@@ -9,7 +9,6 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	greenplumv1 "github.com/pivotal/greenplum-for-kubernetes/greenplum-operator/api/v1"
-	"github.com/pivotal/greenplum-for-kubernetes/greenplum-operator/pkg/admission"
 	"github.com/pivotal/greenplum-for-kubernetes/pkg/gplog"
 	. "github.com/pivotal/greenplum-for-kubernetes/pkg/integrationutils"
 	. "github.com/pivotal/greenplum-for-kubernetes/pkg/integrationutils/kubeexecpsql"
