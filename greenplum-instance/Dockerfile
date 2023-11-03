@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     ./cmd/waitForKnownHosts
 
 # build greenplum-instance image from here
-FROM gcr.io/gp-kubernetes/ubuntu-gpdb-ent:${TAG_PREFIX}${GREENPLUM_VERSION}
+FROM jike21/greenplum-oss:7.0.0-20231030
 
 # remove gppkg because it's misleading to users in the kubernetes environment
 RUN rm -f /usr/local/greenplum-db/bin/gppkg
@@ -85,9 +85,9 @@ RUN /bin/bash -c 'source /usr/local/greenplum-db/greenplum_path.sh && /usr/local
 
 EXPOSE 22
 
-ARG VERSION=dev
-ARG DATE=unknown
-ARG LICENSE="https://network.pivotal.io/legal_documents/vmware_eula"
+ARG VERSION=commit
+ARG DATE="3 Nov 2023"
+ARG LICENSE="https://www.apache.org/licenses/LICENSE-2.0"
 
 LABEL name="Greenplum for Kubernetes" \
     vendor="Pivotal Software" \
