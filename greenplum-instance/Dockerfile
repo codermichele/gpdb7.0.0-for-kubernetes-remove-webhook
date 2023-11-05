@@ -1,42 +1,22 @@
-# syntax = docker/dockerfile:experimental
 ARG TAG_PREFIX=""
 ARG GREENPLUM_VERSION=7.0.0
-FROM golang:1.19 as build-in-docker
+# build greenplum-instance image from here
+FROM jike21/greenplum-oss:7.0.0-20231105
 
 COPY greenplum-instance/ /greenplum-for-kubernetes/greenplum-instance/
 COPY greenplum-operator/ /greenplum-for-kubernetes/greenplum-operator/
 COPY pkg/ /greenplum-for-kubernetes/pkg/
 COPY go.mod go.sum /greenplum-for-kubernetes/
-
-WORKDIR /greenplum-for-kubernetes/greenplum-instance
-
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/go/pkg/mod \
-    mkdir buildcmd && \
-    go build -o ./buildcmd/ \
-    ./cmd/sshKeyScan \
-    ./cmd/startGreenplumContainer  \
-    ./cmd/initializeCluster \
-    ./cmd/startPXF \
-    ./cmd/runGpexpand \
-    ./cmd/waitForKnownHosts
-
-# build greenplum-instance image from here
-FROM jike21/greenplum-oss:7.0.0-20231105
-
-# remove gppkg because it's misleading to users in the kubernetes environment
-RUN rm -f /usr/local/greenplum-db/bin/gppkg
+COPY vendor/ /greenplum-for-kubernetes/vendor/
+COPY go1.19.13/ /usr/local/go
+ENV PATH=/usr/local/go/bin:$PATH GOPATH=/go
 
 ARG TOOLS_DIR=/tools
-
-COPY --from=build-in-docker \
-    /greenplum-for-kubernetes/greenplum-instance/buildcmd/sshKeyScan \
-    /greenplum-for-kubernetes/greenplum-instance/buildcmd/initializeCluster \
-    /greenplum-for-kubernetes/greenplum-instance/buildcmd/startGreenplumContainer \
-    /greenplum-for-kubernetes/greenplum-instance/buildcmd/startPXF \
-    /greenplum-for-kubernetes/greenplum-instance/buildcmd/runGpexpand \
-    /greenplum-for-kubernetes/greenplum-instance/buildcmd/waitForKnownHosts \
-    ${TOOLS_DIR}/
+# remove gppkg because it's misleading to users in the kubernetes environment
+RUN rm -f /usr/local/greenplum-db/bin/gppkg && \
+    mkdir -p ${TOOLS_DIR} && \
+    cp /greenplum-for-kubernetes/greenplum-instance/buildcmd/* ${TOOLS_DIR} && \
+    chmod 0755 /greenplum-for-kubernetes/greenplum-instance/buildcmd/*
 
 COPY \
     greenplum-instance/scripts/gpexpand_job.sh \
