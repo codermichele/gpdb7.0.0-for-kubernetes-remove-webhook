@@ -25,7 +25,7 @@ RUN set -x && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG VERSION=dev
-ARG DATE="3 Nov 2023"
+ARG DATE="4 Nov 2023"
 ARG LICENSE="https://www.apache.org/licenses/LICENSE-2.0"
 ARG GREENPLUM_VERSION=7.0.0
 

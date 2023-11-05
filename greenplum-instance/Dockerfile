@@ -80,12 +80,11 @@ WORKDIR /home/gpadmin
 RUN ln -s ${TOOLS_DIR} /home/gpadmin/tools
 
 # Initialize pxf directories; needs GPHOME set
-#RUN /bin/bash -c 'source /usr/local/greenplum-db/greenplum_path.sh && /usr/local/pxf-gp6/bin/pxf init'
-RUN /bin/bash -c 'source /usr/local/greenplum-db/greenplum_path.sh'
+RUN /bin/bash -c 'source /usr/local/greenplum-db/greenplum_path.sh && /usr/local/pxf-gp6/bin/pxf init'
 
 EXPOSE 22
 
-ARG VERSION=commit
+ARG VERSION=dev
 ARG DATE="3 Nov 2023"
 ARG LICENSE="https://www.apache.org/licenses/LICENSE-2.0"
 

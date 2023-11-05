@@ -7,7 +7,6 @@ GOBIN:=$(PWD)/bin
 DATE:=$(shell date +%FT%H:%M:%S)
 # TODO: rename this.
 DOCKERTAG_PREFIX:=greenplum-instance
-
 CONCOURSE_BUILD?=false
 
 UNAME:=$(shell uname -s)
