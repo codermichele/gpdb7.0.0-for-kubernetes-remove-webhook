@@ -15,6 +15,15 @@ ARG TOOLS_DIR=/tools
 # remove gppkg because it's misleading to users in the kubernetes environment
 RUN rm -f /usr/local/greenplum-db/bin/gppkg && \
     mkdir -p ${TOOLS_DIR} && \
+    cd /greenplum-for-kubernetes/greenplum-instance && \
+    mkdir buildcmd && \
+    go build -o ./buildcmd/ \
+    ./cmd/sshKeyScan \
+    ./cmd/startGreenplumContainer  \
+    ./cmd/initializeCluster \
+    ./cmd/startPXF \
+    ./cmd/runGpexpand \
+    ./cmd/waitForKnownHosts && \
     cp /greenplum-for-kubernetes/greenplum-instance/buildcmd/* ${TOOLS_DIR} && \
     chmod 0755 /greenplum-for-kubernetes/greenplum-instance/buildcmd/*
 
